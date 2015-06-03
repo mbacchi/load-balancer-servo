@@ -55,7 +55,7 @@ class HaproxyProcess(object):
         self.__status = HaproxyProcess.RUNNING
 
     def terminate(self):
-        kill_cmd = 'kill -9 %s' % self.pid()
+        kill_cmd = 'kill -9 %s' % self.get_pid()
 
         if os.path.isfile(self.__pid_path):
             servo.run_as_sudo(kill_cmd)
@@ -68,19 +68,20 @@ class HaproxyProcess(object):
         if self.check_haproxy_process() != 0:
             servo.log.warning('on restart, no running haproxy process found')
 
+        servo.log.debug("Pid is %s" % self.get_pid())
         haproxy_cmd = '%s -f %s -p %s -V -C %s -D -sf %s)' % (self.__haproxy_bin, self.__conf_file,
-                                                                     self.__pid_path, RUN_ROOT, self.pid())
+                                                                     self.__pid_path, RUN_ROOT, self.get_pid())
 
         if servo.run_as_sudo(haproxy_cmd) != 0:
             raise ServoError("failed to restart haproxy process")
 
         self.__status = HaproxyProcess.RUNNING
  
-    def pid(self):
+    def get_pid(self):
         if not os.path.exists(self.__pid_path):
             raise "pid file is not found in %s" % self.__pid_path
-        if subprocess.call('ps -p $(<$s)' % self.__pid_path, shell=True) != 0:
-            raise "process with pid=%s not found" % commands.get_output('cat %s' % self.__pid_path)
+#        if subprocess.call('ps -p $(<$s)' % self.__pid_path, shell=True) != 0:
+#            raise "process with pid=%s not found" % commands.get_output('cat %s' % self.__pid_path)
         pid = commands.getoutput('cat %s' % self.__pid_path)
         return pid
 
