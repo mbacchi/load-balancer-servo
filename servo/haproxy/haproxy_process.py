@@ -68,7 +68,6 @@ class HaproxyProcess(object):
         if self.check_haproxy_process() != 0:
             servo.log.warning('on restart, no running haproxy process found')
 
-        servo.log.debug("Pid is %s" % self.get_pid())
         haproxy_cmd = '%s -f %s -p %s -V -C %s -D -sf %s)' % (self.__haproxy_bin, self.__conf_file,
                                                                      self.__pid_path, RUN_ROOT, self.get_pid())
 
