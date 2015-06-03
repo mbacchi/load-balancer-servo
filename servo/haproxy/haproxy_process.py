@@ -55,7 +55,7 @@ class HaproxyProcess(object):
         self.__status = HaproxyProcess.RUNNING
 
     def terminate(self):
-        kill_cmd = 'kill -9 $(<%s)' % (self.__pid_path)
+        kill_cmd = 'kill -9 %s' % self.pid()
 
         if os.path.isfile(self.__pid_path):
             servo.run_as_sudo(kill_cmd)
@@ -68,8 +68,8 @@ class HaproxyProcess(object):
         if self.check_haproxy_process() != 0:
             servo.log.warning('on restart, no running haproxy process found')
 
-        haproxy_cmd = '%s -f %s -p %s -V -C %s -D -sf $(<%s)' % (self.__haproxy_bin, self.__conf_file,
-                                                                     self.__pid_path, RUN_ROOT, self.__pid_path)
+        haproxy_cmd = '%s -f %s -p %s -V -C %s -D -sf %s)' % (self.__haproxy_bin, self.__conf_file,
+                                                                     self.__pid_path, RUN_ROOT, self.pid())
 
         if servo.run_as_sudo(haproxy_cmd) != 0:
             raise ServoError("failed to restart haproxy process")
