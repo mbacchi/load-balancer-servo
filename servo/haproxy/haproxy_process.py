@@ -80,9 +80,9 @@ class HaproxyProcess(object):
     def get_pid(self):
         if not os.path.exists(self.__pid_path):
             raise "pid file is not found in %s" % self.__pid_path
-#        if subprocess.call('ps -p $(<$s)' % self.__pid_path, shell=True) != 0:
-#            raise "process with pid=%s not found" % commands.get_output('cat %s' % self.__pid_path)
         pid = commands.getoutput('cat %s' % self.__pid_path)
+        if servo.run('ps -p %s' % pid) != 0:
+            raise "process with pid=%s not found" % pid
         return pid
 
     def check_haproxy_process(self):
