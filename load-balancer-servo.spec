@@ -19,7 +19,7 @@ BuildRequires:  python%{?__python_ver}-setuptools
 Requires:       python%{?__python_ver}
 Requires:       python%{?__python_ver}-boto
 Requires:       python%{?__python_ver}-httplib2
-Requires:       haproxy >= 1.5
+Requires:       haproxy >= 1.5.2
 Requires:       sudo
 Requires:       crontabs
 Requires:       ntp
@@ -100,6 +100,9 @@ fi
 %config(noreplace) %{_sysconfdir}/load-balancer-servo/503.http
 
 %changelog
+* Wed Jul 22 2015 Eucalyptus Release Engineering <support@eucalyptus.com> - 1.0.2-0
+- updated haproxy
+
 * Tue Dec 16 2014 Eucalyptus Release Engineering <support@eucalyptus.com> - 1.0.2-0
 - Added chkconfig changes
 
